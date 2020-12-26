@@ -9,18 +9,22 @@ bool ReadWifiData(string path, GridPoint &gp){
     if(!in)
         return false;
 
-    // 先扫描文件 得到一共有几个MAC
     GridPoint tmp;
     while (!in.eof()){
-        string line, mac;
-        int time, rss;
+        string line, mac, name;
+        int time, rss = 0;
         stringstream buff;
         getline(in, line);
         // 去标点
         replace(line.begin(), line.end(), ',', ' ');
         replace(line.begin(), line.end(), '.', '0');
         buff << line;
-        buff >> time >> mac >> rss;
+        buff >> time >> mac >> rss >> name;
+        // cout << mac << endl;
+        if(mac == "")
+            continue;
+            if(gp[mac] > 0)
+                cout << "tev" << endl;
         if(gp.find(mac) == gp.end()){
             gp[mac] = rss;
             tmp[mac] = 1;
@@ -31,5 +35,5 @@ bool ReadWifiData(string path, GridPoint &gp){
         }
     }
     for(GridPoint::iterator iter = gp.begin(); iter != gp.end(); ++ iter)
-        gp[iter->first] /= tmp[iter->first]; 
+        gp[iter->first] /= double(tmp[iter->first]); 
 }
